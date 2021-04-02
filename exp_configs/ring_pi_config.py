@@ -21,7 +21,6 @@ vehicles = VehicleParams()
 vehicles.add(
     veh_id="car",
     acceleration_controller=(PISaturation, {
-
     }),
     routing_controller=(ContinuousRouter, {}),
     num_vehicles=DefaultParams.N_VEHICLES,

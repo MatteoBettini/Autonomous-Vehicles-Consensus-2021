@@ -9,6 +9,8 @@ from flow.core.params import VehicleParams
 from flow.envs.ring.accel import AccelEnv, ADDITIONAL_ENV_PARAMS
 from flow.networks.ring import RingNetwork, ADDITIONAL_NET_PARAMS
 import numpy as np
+
+from controllers.pid_headway_controller import PIDHeadwayController
 from utils import DefaultParams
 
 from controllers.consensus_controller import *
@@ -25,10 +27,16 @@ vehicles.add(
         'acc_max': DefaultParams.MAX_ACCEL,
         'decel_max': DefaultParams.MAX_DECEL,
         'desired_headway': DefaultParams.TARGET_HEADWAY,
+        'k_p': 0.2,
+        'k_d': 1.3,
+        'k_i': 0.0005,
+        # 'k_p': 0.1,
+        # 'k_d': 0.8,
+        # 'k_i': 0.0005,
         'fail_safe': DefaultParams.FAIL_SAFES
     }),
     routing_controller=(ContinuousRouter, {}),
-    num_vehicles=DefaultParams.N_VEHICLES,
+    num_vehicles=DefaultParams.N_VEHICLES - 1,
     car_following_params=SumoCarFollowingParams(
         speed_dev=0,
         max_speed=DefaultParams.MAX_SPEED,
@@ -36,6 +44,29 @@ vehicles.add(
         decel=DefaultParams.MAX_DECEL,
         speed_mode="aggressive"
     ),
+)
+
+vehicles.add(
+    veh_id="fault_vehicle",
+    acceleration_controller=(IDMController, {
+        'v0': DefaultParams.TARGET_SPEED,
+        'a': DefaultParams.MAX_ACCEL,
+        'b': DefaultParams.MAX_DECEL,
+        'T': 1,
+        'crash_faults': DefaultParams.N_BROKEN_VEHICLES > 0,
+        'byzantine_faults': False,
+        'fail_safe': DefaultParams.FAIL_SAFES
+    }),
+    routing_controller=(ContinuousRouter, {}),
+    num_vehicles=1,
+    car_following_params=SumoCarFollowingParams(
+        speed_dev=0,
+        max_speed=DefaultParams.MAX_SPEED,
+        accel=DefaultParams.MAX_ACCEL,
+        decel=DefaultParams.MAX_DECEL,
+        speed_mode="aggressive"
+    ),
+    color='red'
 )
 
 

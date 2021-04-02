@@ -24,10 +24,11 @@ vehicles.add(
         'v0': DefaultParams.TARGET_SPEED,
         'a': DefaultParams.MAX_ACCEL,
         'b': DefaultParams.MAX_DECEL,
+        'T': 1,
         'fail_safe': DefaultParams.FAIL_SAFES
     }),
     routing_controller=(ContinuousRouter, {}),
-    num_vehicles=DefaultParams.N_VEHICLES,
+    num_vehicles=DefaultParams.N_VEHICLES - DefaultParams.N_BROKEN_VEHICLES,
     car_following_params=SumoCarFollowingParams(
         speed_dev=0,
         max_speed=DefaultParams.MAX_SPEED,
@@ -35,6 +36,28 @@ vehicles.add(
         decel=DefaultParams.MAX_DECEL,
         speed_mode="aggressive"
     ),
+)
+
+vehicles.add(
+    veh_id="fault_vehicle",
+    acceleration_controller=(IDMController, {
+        'v0': DefaultParams.TARGET_SPEED,
+        'a': DefaultParams.MAX_ACCEL,
+        'b': DefaultParams.MAX_DECEL,
+        'T': 1,
+        'crash_faults': True,
+        'fail_safe': DefaultParams.FAIL_SAFES
+    }),
+    routing_controller=(ContinuousRouter, {}),
+    num_vehicles=DefaultParams.N_BROKEN_VEHICLES,
+    car_following_params=SumoCarFollowingParams(
+        speed_dev=0,
+        max_speed=DefaultParams.MAX_SPEED,
+        accel=DefaultParams.MAX_ACCEL,
+        decel=DefaultParams.MAX_DECEL,
+        speed_mode="aggressive"
+    ),
+    color='red'
 )
 
 

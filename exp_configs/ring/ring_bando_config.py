@@ -9,6 +9,8 @@ from flow.core.params import VehicleParams
 from flow.envs.ring.accel import AccelEnv, ADDITIONAL_ENV_PARAMS
 from flow.networks.ring import RingNetwork, ADDITIONAL_NET_PARAMS
 import numpy as np
+
+from controllers.bando_controller import BandoController
 from utils import DefaultParams
 
 from controllers.consensus_controller import *
@@ -20,12 +22,13 @@ vehicles = VehicleParams()
 
 vehicles.add(
     veh_id="car",
-    acceleration_controller=(BandoFTLController, {
+    acceleration_controller=(BandoController, {
         'v_max': DefaultParams.TARGET_SPEED,
+        'dec_max': DefaultParams.MAX_ACCEL,
         'fail_safe': DefaultParams.FAIL_SAFES
     }),
     routing_controller=(ContinuousRouter, {}),
-    num_vehicles=DefaultParams.N_VEHICLES,
+    num_vehicles=DefaultParams.N_VEHICLES - DefaultParams.N_BROKEN_VEHICLES,
     car_following_params=SumoCarFollowingParams(
         speed_dev=0,
         max_speed=DefaultParams.MAX_SPEED,
@@ -35,11 +38,31 @@ vehicles.add(
     ),
 )
 
+vehicles.add(
+    veh_id="fault_vehicle",
+    acceleration_controller=(BandoController, {
+        'v_max': DefaultParams.TARGET_SPEED,
+        'dec_max': DefaultParams.MAX_ACCEL,
+        'crash_faults': True,
+        'byzantine_faults': False,
+        'fail_safe': DefaultParams.FAIL_SAFES
+    }),
+    routing_controller=(ContinuousRouter, {}),
+    num_vehicles=DefaultParams.N_BROKEN_VEHICLES,
+    car_following_params=SumoCarFollowingParams(
+        speed_dev=0,
+        max_speed=DefaultParams.MAX_SPEED,
+        accel=DefaultParams.MAX_ACCEL,
+        decel=DefaultParams.MAX_DECEL,
+        speed_mode="aggressive"
+    ),
+    color='red'
+)
 
 
 flow_params = dict(
     # name of the experiment
-    exp_tag='ring_BandoFTL',
+    exp_tag='ring_Bando',
 
     # name of the flow environment the experiment is running on
     env_name=AccelEnv,

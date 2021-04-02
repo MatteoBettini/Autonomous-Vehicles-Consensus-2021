@@ -25,11 +25,11 @@ vehicles.add(
         'acc': DefaultParams.MAX_ACCEL,
         'b': -DefaultParams.MAX_DECEL,
         'b_l': -DefaultParams.MAX_DECEL,
-        'tau': 0.1,
-        'fail_safe': DefaultParams.FAIL_SAFES
+        'tau': DefaultParams.SIM_STEP + 0.01,
+        'fail_safe': DefaultParams.FAIL_SAFES,
     }),
     routing_controller=(ContinuousRouter, {}),
-    num_vehicles=DefaultParams.N_VEHICLES,
+    num_vehicles=DefaultParams.N_VEHICLES - DefaultParams.N_BROKEN_VEHICLES,
     car_following_params=SumoCarFollowingParams(
         speed_dev=0,
         max_speed=DefaultParams.MAX_SPEED,
@@ -37,6 +37,29 @@ vehicles.add(
         decel=DefaultParams.MAX_DECEL,
         speed_mode="aggressive"
     ),
+)
+
+vehicles.add(
+    veh_id="fault_vehicle",
+    acceleration_controller=(GippsController, {
+        'v0': DefaultParams.TARGET_SPEED,
+        'acc': DefaultParams.MAX_ACCEL,
+        'b': -DefaultParams.MAX_DECEL,
+        'b_l': -DefaultParams.MAX_DECEL,
+        'tau': DefaultParams.TAU,
+        'crash_faults': True,
+        'fail_safe': DefaultParams.FAIL_SAFES,
+    }),
+    routing_controller=(ContinuousRouter, {}),
+    num_vehicles=DefaultParams.N_BROKEN_VEHICLES,
+    car_following_params=SumoCarFollowingParams(
+        speed_dev=0,
+        max_speed=DefaultParams.MAX_SPEED,
+        accel=DefaultParams.MAX_ACCEL,
+        decel=DefaultParams.MAX_DECEL,
+        speed_mode="aggressive"
+    ),
+    color='red'
 )
 
 

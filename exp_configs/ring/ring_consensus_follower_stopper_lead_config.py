@@ -25,6 +25,11 @@ vehicles.add(
         'v_max': DefaultParams.TARGET_SPEED,
         'acc_max': DefaultParams.MAX_ACCEL,
         'decel_max': DefaultParams.MAX_DECEL,
+        'v_inc': 0,
+        'tau': DefaultParams.TAU,
+        'n_hops': DefaultParams.N_HOPS,
+        'crash_faults': False,
+        'byzantine_faults': False,
         'fail_safe': DefaultParams.FAIL_SAFES
     }),
     routing_controller=(ContinuousRouter, {}),
@@ -40,12 +45,10 @@ vehicles.add(
 
 vehicles.add(
     veh_id="leader",
-    acceleration_controller=(PIDHeadwayController, {
-        'v_max': DefaultParams.TARGET_SPEED,
-        'acc_max': DefaultParams.MAX_ACCEL,
-        'decel_max': DefaultParams.MAX_DECEL,
-        'desired_headway': DefaultParams.TARGET_HEADWAY,
-        'fail_safe': DefaultParams.FAIL_SAFES
+    acceleration_controller=(FollowerStopper, {
+        'v_des': DefaultParams.TARGET_SPEED,
+        'crash_faults': DefaultParams.N_BROKEN_VEHICLES > 0,
+        'byzantine_faults': False,
     }),
     routing_controller=(ContinuousRouter, {}),
     num_vehicles=1,
@@ -65,7 +68,7 @@ vehicles.add(
 
 flow_params = dict(
     # name of the experiment
-    exp_tag='ring_consensus',
+    exp_tag='ring_ConsesusFollowerStopperLead',
 
     # name of the flow environment the experiment is running on
     env_name=AccelEnv,

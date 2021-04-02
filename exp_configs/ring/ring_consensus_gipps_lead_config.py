@@ -25,6 +25,11 @@ vehicles.add(
         'v_max': DefaultParams.TARGET_SPEED,
         'acc_max': DefaultParams.MAX_ACCEL,
         'decel_max': DefaultParams.MAX_DECEL,
+        'v_inc': 0,
+        'n_hops': DefaultParams.N_HOPS,
+        'tau': DefaultParams.TAU,
+        'crash_faults': False,
+        'byzantine_faults': False,
         'fail_safe': DefaultParams.FAIL_SAFES
     }),
     routing_controller=(ContinuousRouter, {}),
@@ -40,11 +45,14 @@ vehicles.add(
 
 vehicles.add(
     veh_id="leader",
-    acceleration_controller=(PIDHeadwayController, {
-        'v_max': DefaultParams.TARGET_SPEED,
-        'acc_max': DefaultParams.MAX_ACCEL,
-        'decel_max': DefaultParams.MAX_DECEL,
-        'desired_headway': DefaultParams.TARGET_HEADWAY,
+    acceleration_controller=(GippsController, {
+        'v0': DefaultParams.TARGET_SPEED,
+        'acc': DefaultParams.MAX_ACCEL,
+        'b': -DefaultParams.MAX_DECEL,
+        'b_l': -DefaultParams.MAX_DECEL,
+        'tau': DefaultParams.TAU,
+        'crash_faults': DefaultParams.N_BROKEN_VEHICLES > 0,
+        'byzantine_faults': False,
         'fail_safe': DefaultParams.FAIL_SAFES
     }),
     routing_controller=(ContinuousRouter, {}),
@@ -65,7 +73,7 @@ vehicles.add(
 
 flow_params = dict(
     # name of the experiment
-    exp_tag='ring_Consesus',
+    exp_tag='ring_ConsesusGippsLead',
 
     # name of the flow environment the experiment is running on
     env_name=AccelEnv,

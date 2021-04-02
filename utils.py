@@ -20,20 +20,30 @@ def checkSumoHome():
 
 class DefaultParams:
 
+    # SIM PARAMS
     RING_RADIUS = 41.4
     MAX_SPEED = 30
     TARGET_SPEED = MAX_SPEED
     MAX_ACCEL = 2
     MAX_DECEL = MAX_ACCEL
-    N_VEHICLES = 11
-    DURATION = 150
+    N_VEHICLES = 20
+    N_BROKEN_VEHICLES = 0
+    DURATION = 300
     INITIAL_HEADWAY = ((2 * np.pi * RING_RADIUS) / N_VEHICLES) - 5  # Vehicle length
-    TARGET_HEADWAY = 0.5 * INITIAL_HEADWAY
+    SIM_STEP = 0.1
+    TAU = SIM_STEP + 0.03
 
+    # PID HEADWAY PARAMS
+    TARGET_HEADWAY = 0.6 * TARGET_SPEED + 2
+
+    # INIT PARAMS
     BUNCHING = 0
     PERTURBATION = 0
 
-    SIM_STEP = 0.1
+    # CONSENSUS PARMS
+    V_INC = 0.2
+    N_HOPS = -1
+
 
     FAIL_SAFES = ["obey_speed_limit", "feasible_accel"]
 

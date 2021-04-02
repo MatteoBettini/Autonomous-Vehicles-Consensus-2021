@@ -9,19 +9,25 @@ from flow.core.params import VehicleParams
 from flow.envs.ring.accel import AccelEnv, ADDITIONAL_ENV_PARAMS
 from flow.networks.ring import RingNetwork, ADDITIONAL_NET_PARAMS
 import numpy as np
+
 from utils import DefaultParams
 
 from controllers.consensus_controller import *
 
-
-
 vehicles = VehicleParams()
 
-
 vehicles.add(
-    veh_id="car",
-    acceleration_controller=(FollowerStopper, {
-        'v_des': DefaultParams.TARGET_SPEED,
+    veh_id="follower",
+    acceleration_controller=(ConsensusController, {
+        'v_max': DefaultParams.TARGET_SPEED,
+        'acc_max': DefaultParams.MAX_ACCEL,
+        'decel_max': DefaultParams.MAX_DECEL,
+        'v_inc': DefaultParams.V_INC,
+        'n_hops': DefaultParams.N_HOPS,
+        'tau': DefaultParams.TAU,
+        'crash_faults': False,
+        'byzantine_faults': False,
+        'fail_safe': DefaultParams.FAIL_SAFES
     }),
     routing_controller=(ContinuousRouter, {}),
     num_vehicles=DefaultParams.N_VEHICLES - DefaultParams.N_BROKEN_VEHICLES,
@@ -36,10 +42,16 @@ vehicles.add(
 
 vehicles.add(
     veh_id="fault_vehicle",
-    acceleration_controller=(FollowerStopper, {
-        'v_des': DefaultParams.TARGET_SPEED,
+    acceleration_controller=(ConsensusController, {
+        'v_max': DefaultParams.TARGET_SPEED,
+        'acc_max': DefaultParams.MAX_ACCEL,
+        'decel_max': DefaultParams.MAX_DECEL,
+        'v_inc': DefaultParams.V_INC,
+        'n_hops': DefaultParams.N_HOPS,
+        'tau': DefaultParams.TAU,
         'crash_faults': True,
         'byzantine_faults': False,
+        'fail_safe': DefaultParams.FAIL_SAFES
     }),
     routing_controller=(ContinuousRouter, {}),
     num_vehicles=DefaultParams.N_BROKEN_VEHICLES,
@@ -54,11 +66,9 @@ vehicles.add(
 )
 
 
-
-
 flow_params = dict(
     # name of the experiment
-    exp_tag='ring_FollowerStopper',
+    exp_tag='ring_ConsesusLeaderLess',
 
     # name of the flow environment the experiment is running on
     env_name=AccelEnv,
