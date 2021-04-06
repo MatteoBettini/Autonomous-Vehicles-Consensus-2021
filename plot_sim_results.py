@@ -7,13 +7,7 @@ from IPython import get_ipython
 
 from utils import *
 
-try:
-    from matplotlib import pyplot as plt
-except ImportError:
-    import matplotlib
-    matplotlib.use('TkAgg')
-    from matplotlib import pyplot as plt
-
+from matplotlib import pyplot as plt
 import numpy as np
 import pandas as pd
 
@@ -75,7 +69,7 @@ def plot_sim_results(csv_file: str, params_dict, plot=True, folder_to_save=None)
         if folder_to_save:
             fig.savefig(folder_to_save + '/' + title + '/' + 'result.pdf')
 
-        plt.show();
+        plt.show()
 
 
 def plot_multiple_results(params_dict):
@@ -118,7 +112,7 @@ def plot_multiple_results(params_dict):
 
     fig.savefig(str(PathUtils.data_folder) + '/' + title + '/' + 'result.pdf')
 
-    plt.show();
+    plt.show()
 
 
 def get_title(params_dict):
