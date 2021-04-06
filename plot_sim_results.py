@@ -11,17 +11,12 @@ try:
     from matplotlib import pyplot as plt
 except ImportError:
     import matplotlib
-
     matplotlib.use('TkAgg')
     from matplotlib import pyplot as plt
 
 import numpy as np
 import pandas as pd
 
-try:
-    get_ipython().run_line_magic('matplotlib', 'inline')
-except:
-    pass
 
 plt.rcParams['figure.figsize'] = (5, 4)
 plt.rcParams['figure.facecolor'] = 'white'
@@ -57,6 +52,7 @@ def plot_sim_results(csv_file: str, params_dict, plot=True, folder_to_save=None)
 
     if plot:
 
+        print('Printing')
         fig, axs = plt.subplots(1, 2)
 
         axs[0].set_title('Average speed')
@@ -74,7 +70,7 @@ def plot_sim_results(csv_file: str, params_dict, plot=True, folder_to_save=None)
             ax_v.legend()
 
         fig.suptitle(title, fontsize=12)
-        fig.canvas.set_window_title(title)
+        #fig.canvas.set_window_title(title)
 
         if folder_to_save:
             fig.savefig(folder_to_save + '/' + title + '/' + 'result.pdf')
