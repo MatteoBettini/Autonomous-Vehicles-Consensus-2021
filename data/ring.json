@@ -8,7 +8,7 @@
         },
         "clip_actions": true,
         "evaluate": false,
-        "horizon": 4000,
+        "horizon": 500,
         "sims_per_step": 1,
         "warmup_steps": 0
     },
@@ -110,7 +110,7 @@
                 },
                 "lane_change_mode": 512
             },
-            "num_vehicles": 19,
+            "num_vehicles": 10,
             "routing_controller": [
                 "ContinuousRouter",
                 {}
@@ -165,7 +165,7 @@
                 },
                 "lane_change_mode": 512
             },
-            "num_vehicles": 1,
+            "num_vehicles": 0,
             "routing_controller": [
                 "ContinuousRouter",
                 {}

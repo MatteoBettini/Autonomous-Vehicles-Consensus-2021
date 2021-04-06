@@ -146,9 +146,9 @@ def get_title(params_dict):
 def get_datframe(csv_name: str):
 
     df = pd.read_csv(csv_name)
-    df_mean = df.groupby("time")["speed","realized_accel"].mean()
+    df_mean = df.groupby("time")[["speed","realized_accel"]].mean()
     df_headway = df[df["id"] != "fault_vehicle_0"][["time","headway","speed"]]
-    df_headway = df_headway.groupby("time")["headway","speed"].mean()
+    df_headway = df_headway.groupby("time")[["headway","speed"]].mean()
     df_mean = df_mean.join(df_headway["headway"])
 
     return df_mean.iloc[1:]
