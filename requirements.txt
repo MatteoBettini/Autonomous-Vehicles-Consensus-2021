@@ -119,14 +119,9 @@ sphinxcontrib-qthelp==1.0.3
 sphinxcontrib-serializinghtml==1.1.4
 svgwrite==1.4.1
 tabulate==0.8.9
-tensorboard==1.15.0
-tensorboardX==2.1
-tensorflow==1.15.2
-tensorflow-estimator==1.15.1
 termcolor==1.1.0
 terminado==0.9.2
 toml==0.10.2
-torch==1.4.0
 typing-extensions==3.7.4.3
 urllib3==1.25.9
 webencodings==0.5.1
