@@ -52,7 +52,7 @@ vehicles.add(
         'v0': DefaultParams.TARGET_SPEED,
         'a': DefaultParams.MAX_ACCEL,
         'b': DefaultParams.MAX_DECEL,
-        'T': 1,
+        'T': DefaultParams.TIME_HEADWAY_IDM,
         'crash_faults': DefaultParams.N_BROKEN_VEHICLES > 0,
         'byzantine_faults': False,
         'fail_safe': DefaultParams.FAIL_SAFES

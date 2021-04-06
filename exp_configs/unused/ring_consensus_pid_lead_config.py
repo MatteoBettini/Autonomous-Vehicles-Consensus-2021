@@ -10,7 +10,7 @@ from flow.envs.ring.accel import AccelEnv, ADDITIONAL_ENV_PARAMS
 from flow.networks.ring import RingNetwork, ADDITIONAL_NET_PARAMS
 import numpy as np
 
-
+from controllers.pid_headway_controller import PIDHeadwayController
 from utils import DefaultParams
 
 from controllers.consensus_controller import *
@@ -25,7 +25,10 @@ vehicles.add(
         'v_max': DefaultParams.TARGET_SPEED,
         'acc_max': DefaultParams.MAX_ACCEL,
         'decel_max': DefaultParams.MAX_DECEL,
-        'v_inc': 0.1,
+        'v_inc': 0,
+        'n_hops': DefaultParams.N_HOPS,
+        'crash_faults': False,
+        'byzantine_faults': False,
         'fail_safe': DefaultParams.FAIL_SAFES
     }),
     routing_controller=(ContinuousRouter, {}),
@@ -41,11 +44,15 @@ vehicles.add(
 
 vehicles.add(
     veh_id="leader",
-    acceleration_controller=(IDMController, {
-        'v0': DefaultParams.TARGET_SPEED,
-        'a': DefaultParams.MAX_ACCEL,
-        'b': DefaultParams.MAX_DECEL,
-        'T': 0.1,
+    acceleration_controller=(PIDHeadwayController, {
+        'v_max': DefaultParams.TARGET_SPEED,
+        'acc_max': DefaultParams.MAX_ACCEL,
+        'decel_max': DefaultParams.MAX_DECEL,
+        'desired_headway': DefaultParams.TARGET_HEADWAY,
+        'crash_faults': DefaultParams.N_BROKEN_VEHICLES > 0,
+        'k_p': 0.2,
+        'k_d': 1.3,
+        'k_i': 0.0005,
         'fail_safe': DefaultParams.FAIL_SAFES
     }),
     routing_controller=(ContinuousRouter, {}),
@@ -62,11 +69,9 @@ vehicles.add(
 
 
 
-
-
 flow_params = dict(
     # name of the experiment
-    exp_tag='ring',
+    exp_tag='ring_ConsesusPIDHeadwayLead',
 
     # name of the flow environment the experiment is running on
     env_name=AccelEnv,
@@ -125,7 +130,7 @@ flow_params = dict(
     initial=InitialConfig(
         spacing="uniform",
         # specifies the positioning of vehicles in the network relative to one another. May be one of: "uniform", "random", or "custom"
-        perturbation=0.0,
-        bunching=0
+        perturbation=DefaultParams.PERTURBATION,
+        bunching=DefaultParams.BUNCHING
     )
 )

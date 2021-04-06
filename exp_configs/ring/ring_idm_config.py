@@ -24,7 +24,7 @@ vehicles.add(
         'v0': DefaultParams.TARGET_SPEED,
         'a': DefaultParams.MAX_ACCEL,
         'b': DefaultParams.MAX_DECEL,
-        'T': 1,
+        'T': DefaultParams.TIME_HEADWAY_IDM,
         'fail_safe': DefaultParams.FAIL_SAFES
     }),
     routing_controller=(ContinuousRouter, {}),
@@ -44,7 +44,7 @@ vehicles.add(
         'v0': DefaultParams.TARGET_SPEED,
         'a': DefaultParams.MAX_ACCEL,
         'b': DefaultParams.MAX_DECEL,
-        'T': 1,
+        'T': DefaultParams.TIME_HEADWAY_IDM,
         'crash_faults': True,
         'fail_safe': DefaultParams.FAIL_SAFES
     }),

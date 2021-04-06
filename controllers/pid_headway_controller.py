@@ -13,9 +13,9 @@ class PIDHeadwayController(BaseController):
                  acc_max=2,
                  decel_max=2,
                  desired_headway=3,
-                 k_p=.01,
-                 k_d=.07,
-                 k_i=.0005,
+                 k_p=0.2,
+                 k_d=1.3,
+                 k_i=0.0005,
                  crash_faults=False,
                  byzantine_faults=False,
                  fail_safe=["obey_speed_limit", "feasible_accel"]

@@ -15,7 +15,7 @@ except ImportError:
 import numpy as np
 import pandas as pd
 
-plt.rcParams['figure.figsize'] = (11.0, 5)
+plt.rcParams['figure.figsize'] = (5, 4)
 plt.rcParams['figure.facecolor'] = 'white'
 plt.rcParams['figure.subplot.bottom'] = 0.125
 plt.rcParams['figure.edgecolor'] = 'white'
@@ -24,19 +24,19 @@ plt.rcParams["savefig.dpi"] = 300
 plt.rcParams["savefig.bbox"] = 'tight'
 plt.rcParams["savefig.pad_inches"] = 0.1
 
-plt.rcParams['font.size'] = 10
-plt.rcParams['axes.labelsize'] = 10
-plt.rcParams['xtick.labelsize'] = 10
-plt.rcParams['ytick.labelsize'] = 10
+plt.rcParams['font.size'] = 7
+plt.rcParams['axes.labelsize'] = 7
+plt.rcParams['xtick.labelsize'] = 7
+plt.rcParams['ytick.labelsize'] = 7
 
 
 
 def plot_sim_results(csv_file: str, params_dict, plot=True, folder_to_save=None):
 
-    df, df_headway = get_datframe(csv_file)
+    df = get_datframe(csv_file)
 
-    if df['speed'].mean() < 0:
-        return
+    # if df['speed'].mean() < 0:
+    #     return
 
     title = get_title(params_dict)
 
@@ -51,24 +51,14 @@ def plot_sim_results(csv_file: str, params_dict, plot=True, folder_to_save=None)
 
     if plot:
 
-        columns = 2
-        if not df_headway.empty:
-            columns += 1
+        fig, axs = plt.subplots(1, 2)
 
-        fig, axs = plt.subplots(1, columns)
-
-        axs[0].set_title('Avrage speed')
-        axs[1].set_title('Avrage accelleration')
+        axs[0].set_title('Average speed')
+        axs[1].set_title('Average accelleration')
 
         axs[0].set(xlabel='Seconds', ylabel='m/s')
         axs[1].set(xlabel='Seconds', ylabel='m/$s^2$')
 
-
-
-        if not df_headway.empty:
-            axs[2].set_title('Leader headway error')
-            axs[2].set(xlabel='Seconds', ylabel='Error')
-            axs[2].plot(df_headway['headway'] - DefaultParams.TARGET_HEADWAY, label=accell_controller)
 
         # color = next(axs[0, 0]._get_lines.prop_cycler)['color']
 
@@ -95,13 +85,13 @@ def plot_multiple_results(params_dict):
 
     controllers = glob.glob(str(PathUtils.data_folder) + '/' + title + '/*.pkl')
 
-    fig, axs = plt.subplots(1, 2)
+    fig, axs = plt.subplots(1, 1)
 
-    axs[0].set_title('Avrage speed')
-    axs[1].set_title('Avrage accelleration')
+    axs.set_title('Average headway')
+    # axs[1].set_title('Avrage accelleration')
 
-    axs[0].set(xlabel='Seconds', ylabel='m/s')
-    axs[1].set(xlabel='Seconds', ylabel='m/$s^2$')
+    axs.set(xlabel='Seconds', ylabel='m/s')
+    # axs[1].set(xlabel='Seconds', ylabel='m/$s^2$')
 
     for controller in controllers:
 
@@ -111,19 +101,22 @@ def plot_multiple_results(params_dict):
 
         controller_name = controller.rsplit('/', 1)[1].rsplit('.', 1)[0].rsplit('_',1)[1]
 
-        axs[0].plot(df['speed'], label=controller_name)
-        axs[1].plot(df['realized_accel'], label=controller_name)
+        if controller_name == 'LLVC' or controller_name == 'PIDHeadway':
+            controller_name += ' (our)'
+
+        axs.plot(df['speed'], label=controller_name)
+        # axs.plot(df['headway'], label=controller_name)
+        # axs[1].plot(df['realized_accel'], label=controller_name)
 
 
     files = glob.glob(str(PathUtils.data_folder) + '/' + title + '/*.pkl')
     for file in files:
         os.remove(file)
 
+    # for ax_v in axs:
+    axs.legend(loc='lower right', prop={'size': 8})
 
-    for ax_v in axs:
-        ax_v.legend()
-
-    fig.suptitle(title, fontsize=12)
+    # fig.suptitle(title, fontsize=12)
     fig.canvas.set_window_title(title)
 
     fig.savefig(str(PathUtils.data_folder) + '/' + title + '/' + 'result.pdf')
@@ -153,10 +146,12 @@ def get_title(params_dict):
 def get_datframe(csv_name: str):
 
     df = pd.read_csv(csv_name)
-    df_mean = df.groupby("time")["speed","realized_accel","headway"].mean()
-    df_headway_leader = df[df["id"] == "leader_0"][["time","headway"]]
+    df_mean = df.groupby("time")["speed","realized_accel"].mean()
+    df_headway = df[df["id"] != "fault_vehicle_0"][["time","headway","speed"]]
+    df_headway = df_headway.groupby("time")["headway","speed"].mean()
+    df_mean = df_mean.join(df_headway["headway"])
 
-    return df_mean.iloc[1:], df_headway_leader
+    return df_mean.iloc[1:]
 
 def create_directory(path: str):
     try:

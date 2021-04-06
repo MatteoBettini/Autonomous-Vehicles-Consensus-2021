@@ -30,7 +30,7 @@ def parse_args(args):
 
     # required input parameters
     parser.add_argument(
-        '--exp_config', type=str, default='ring_pid_headway_config',
+        '--exp_config', type=str, default='ring_idm_config',
         help='Name of the experiment configuration file, as located in '
              'exp_configs/local.')
 

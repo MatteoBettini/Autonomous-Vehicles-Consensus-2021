@@ -68,7 +68,7 @@ vehicles.add(
 
 flow_params = dict(
     # name of the experiment
-    exp_tag='ring_ConsesusLeaderLess',
+    exp_tag='ring_LLVC',
 
     # name of the flow environment the experiment is running on
     env_name=AccelEnv,
