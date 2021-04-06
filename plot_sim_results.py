@@ -35,8 +35,8 @@ def plot_sim_results(csv_file: str, params_dict, plot=True, folder_to_save=None)
 
     df = get_datframe(csv_file)
 
-    # if df['speed'].mean() < 0:
-    #     return
+    if df['speed'].mean() < 0:
+        return
 
     title = get_title(params_dict)
 

@@ -30,7 +30,7 @@ def parse_args(args):
 
     # required input parameters
     parser.add_argument(
-        '--exp_config', type=str, default='ring_idm_config',
+        '--exp_config', type=str, default='ring_consensus_leaderless_config',
         help='Name of the experiment configuration file, as located in '
              'exp_configs/local.')
 
@@ -55,7 +55,7 @@ def parse_args(args):
     parser.add_argument(
         '--no_plot_outcome',
         action='store_true',
-        help='Plots the speed and accellerations of the experiment'
+        help='Specifies wheather to plot the speed and accellerations of the experiment'
     )
 
     return parser.parse_known_args(args)[0]
