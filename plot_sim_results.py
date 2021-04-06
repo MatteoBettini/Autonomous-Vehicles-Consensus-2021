@@ -70,12 +70,12 @@ def plot_sim_results(csv_file: str, params_dict, plot=True, folder_to_save=None)
             ax_v.legend()
 
         fig.suptitle(title, fontsize=12)
-        #fig.canvas.set_window_title(title)
+        fig.canvas.set_window_title(title)
 
         if folder_to_save:
             fig.savefig(folder_to_save + '/' + title + '/' + 'result.pdf')
 
-        plt.show()
+        plt.show();
 
 
 def plot_multiple_results(params_dict):
@@ -118,7 +118,7 @@ def plot_multiple_results(params_dict):
 
     fig.savefig(str(PathUtils.data_folder) + '/' + title + '/' + 'result.pdf')
 
-    plt.show()
+    plt.show();
 
 
 def get_title(params_dict):
