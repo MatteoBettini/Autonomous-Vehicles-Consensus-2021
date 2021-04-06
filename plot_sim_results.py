@@ -3,17 +3,25 @@ import glob
 import os
 import pickle
 
+from IPython import get_ipython
+
 from utils import *
 
 try:
     from matplotlib import pyplot as plt
 except ImportError:
     import matplotlib
+
     matplotlib.use('TkAgg')
     from matplotlib import pyplot as plt
 
 import numpy as np
 import pandas as pd
+
+try:
+    get_ipython().run_line_magic('matplotlib', 'inline')
+except:
+    pass
 
 plt.rcParams['figure.figsize'] = (5, 4)
 plt.rcParams['figure.facecolor'] = 'white'
@@ -30,9 +38,7 @@ plt.rcParams['xtick.labelsize'] = 7
 plt.rcParams['ytick.labelsize'] = 7
 
 
-
 def plot_sim_results(csv_file: str, params_dict, plot=True, folder_to_save=None):
-
     df = get_datframe(csv_file)
 
     if df['speed'].mean() < 0:
@@ -41,7 +47,7 @@ def plot_sim_results(csv_file: str, params_dict, plot=True, folder_to_save=None)
     title = get_title(params_dict)
 
     exp_tag = params_dict['exp_tag']
-    accell_controller = exp_tag.rsplit('_',1)[1]
+    accell_controller = exp_tag.rsplit('_', 1)[1]
 
     directory_path = str(PathUtils.data_folder) + '/' + title
     create_directory(directory_path)
@@ -58,7 +64,6 @@ def plot_sim_results(csv_file: str, params_dict, plot=True, folder_to_save=None)
 
         axs[0].set(xlabel='Seconds', ylabel='m/s')
         axs[1].set(xlabel='Seconds', ylabel='m/$s^2$')
-
 
         # color = next(axs[0, 0]._get_lines.prop_cycler)['color']
 
@@ -77,10 +82,7 @@ def plot_sim_results(csv_file: str, params_dict, plot=True, folder_to_save=None)
         plt.show()
 
 
-
-
 def plot_multiple_results(params_dict):
-
     title = get_title(params_dict)
 
     controllers = glob.glob(str(PathUtils.data_folder) + '/' + title + '/*.pkl')
@@ -95,11 +97,11 @@ def plot_multiple_results(params_dict):
 
     for controller in controllers:
 
-        with open(controller,'rb') as f:
+        with open(controller, 'rb') as f:
             df = pickle.load(f)
             f.close()
 
-        controller_name = controller.rsplit('/', 1)[1].rsplit('.', 1)[0].rsplit('_',1)[1]
+        controller_name = controller.rsplit('/', 1)[1].rsplit('.', 1)[0].rsplit('_', 1)[1]
 
         if controller_name == 'LLVC' or controller_name == 'PIDHeadway':
             controller_name += ' (our)'
@@ -107,7 +109,6 @@ def plot_multiple_results(params_dict):
         axs.plot(df['speed'], label=controller_name)
         # axs.plot(df['headway'], label=controller_name)
         # axs[1].plot(df['realized_accel'], label=controller_name)
-
 
     files = glob.glob(str(PathUtils.data_folder) + '/' + title + '/*.pkl')
     for file in files:
@@ -125,7 +126,6 @@ def plot_multiple_results(params_dict):
 
 
 def get_title(params_dict):
-
     # Get params
     max_accel = params_dict['veh'][0]['car_following_params']['controller_params']['accel']
     max_decel = params_dict['veh'][0]['car_following_params']['controller_params']['decel']
@@ -144,14 +144,14 @@ def get_title(params_dict):
 
 
 def get_datframe(csv_name: str):
-
     df = pd.read_csv(csv_name)
-    df_mean = df.groupby("time")[["speed","realized_accel"]].mean()
-    df_headway = df[df["id"] != "fault_vehicle_0"][["time","headway","speed"]]
-    df_headway = df_headway.groupby("time")[["headway","speed"]].mean()
+    df_mean = df.groupby("time")[["speed", "realized_accel"]].mean()
+    df_headway = df[df["id"] != "fault_vehicle_0"][["time", "headway", "speed"]]
+    df_headway = df_headway.groupby("time")[["headway", "speed"]].mean()
     df_mean = df_mean.join(df_headway["headway"])
 
     return df_mean.iloc[1:]
+
 
 def create_directory(path: str):
     try:

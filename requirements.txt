@@ -130,3 +130,6 @@ widgetsnbextension==3.5.1
 wrapt==1.12.1
 yarl==1.6.3
 zipp==3.4.1
+
+flow~=0.5.0.dev0
+ipython~=7.21.0
