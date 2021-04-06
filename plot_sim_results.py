@@ -3,8 +3,6 @@ import glob
 import os
 import pickle
 
-from IPython import get_ipython
-
 from utils import *
 
 from matplotlib import pyplot as plt
@@ -46,7 +44,6 @@ def plot_sim_results(csv_file: str, params_dict, plot=True, folder_to_save=None)
 
     if plot:
 
-        print('Printing')
         fig, axs = plt.subplots(1, 2)
 
         axs[0].set_title('Average speed')
@@ -79,7 +76,7 @@ def plot_multiple_results(params_dict):
 
     fig, axs = plt.subplots(1, 1)
 
-    axs.set_title('Average headway')
+    axs.set_title('Average speed')
     # axs[1].set_title('Avrage accelleration')
 
     axs.set(xlabel='Seconds', ylabel='m/s')
