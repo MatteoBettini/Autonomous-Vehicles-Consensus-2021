@@ -25,7 +25,7 @@ vehicles.add(
         'a': DefaultParams.MAX_ACCEL,
         'b': DefaultParams.MAX_DECEL,
         'T': DefaultParams.TIME_HEADWAY_IDM,
-        'fail_safe': DefaultParams.FAIL_SAFES
+        'fail_safe': DefaultParams.FAIL_SAFES,
     }),
     routing_controller=(ContinuousRouter, {}),
     num_vehicles=DefaultParams.N_VEHICLES - DefaultParams.N_BROKEN_VEHICLES,

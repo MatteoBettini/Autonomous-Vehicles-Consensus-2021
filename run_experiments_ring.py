@@ -19,7 +19,7 @@ if __name__ == '__main__':
         command = ['python',
                    PathUtils.run_ring_file,
                    '--exp_config', config,
-                   '--no_render',
+                   #'--no_render',
                    '--no_plot_outcome'
                    ]
 

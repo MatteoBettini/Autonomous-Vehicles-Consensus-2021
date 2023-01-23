@@ -28,7 +28,7 @@ class DefaultParams:
     MAX_DECEL = MAX_ACCEL
     N_VEHICLES = 10
     N_BROKEN_VEHICLES = 0
-    DURATION = 50
+    DURATION = 300
     INITIAL_HEADWAY = ((2 * np.pi * RING_RADIUS) / N_VEHICLES) - 5  # Vehicle length
     SIM_STEP = 0.1
     TAU = SIM_STEP + 0.03

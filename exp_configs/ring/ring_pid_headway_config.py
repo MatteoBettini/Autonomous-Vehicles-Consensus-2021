@@ -66,7 +66,7 @@ vehicles.add(
         decel=DefaultParams.MAX_DECEL,
         speed_mode="aggressive"
     ),
-    color='red'
+    color='green'
 )
 
 

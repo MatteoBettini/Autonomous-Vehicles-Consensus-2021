@@ -8,15 +8,15 @@
         },
         "clip_actions": true,
         "evaluate": false,
-        "horizon": 500,
+        "horizon": 3000,
         "sims_per_step": 1,
         "warmup_steps": 0
     },
     "env_name": "flow.envs.ring.accel.AccelEnv",
-    "exp_tag": "ring_LLVC",
+    "exp_tag": "ring_IDM",
     "initial": {
         "additional_params": {},
-        "bunching": 0,
+        "bunching": 50,
         "edges_distribution": "all",
         "lanes_distribution": Infinity,
         "min_gap": 0,
@@ -64,20 +64,17 @@
     "veh": [
         {
             "acceleration_controller": [
-                "ConsensusController",
+                "IDMController",
                 {
-                    "acc_max": 2,
-                    "byzantine_faults": false,
-                    "crash_faults": false,
-                    "decel_max": 2,
+                    "T": 0.8,
+                    "a": 2,
+                    "b": 2,
                     "fail_safe": [
                         "obey_speed_limit",
                         "feasible_accel"
                     ],
-                    "n_hops": -1,
-                    "tau": 0.13,
-                    "v_inc": 0.2,
-                    "v_max": 30
+                    "noise": 1,
+                    "v0": 30
                 }
             ],
             "car_following_params": {
@@ -115,24 +112,21 @@
                 "ContinuousRouter",
                 {}
             ],
-            "veh_id": "follower"
+            "veh_id": "car"
         },
         {
             "acceleration_controller": [
-                "ConsensusController",
+                "IDMController",
                 {
-                    "acc_max": 2,
-                    "byzantine_faults": false,
+                    "T": 0.8,
+                    "a": 2,
+                    "b": 2,
                     "crash_faults": true,
-                    "decel_max": 2,
                     "fail_safe": [
                         "obey_speed_limit",
                         "feasible_accel"
                     ],
-                    "n_hops": -1,
-                    "tau": 0.13,
-                    "v_inc": 0.2,
-                    "v_max": 30
+                    "v0": 30
                 }
             ],
             "car_following_params": {
